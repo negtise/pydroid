@@ -7,7 +7,10 @@ LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH)/../include/python \
 
 LOCAL_LDFLAGS += -ldl -lz
-LOCAL_SHARED_LIBRARIES += liblog libutils libbinder libcutils
+
+LOCAL_SHARED_LIBRARIES := \
+	libstagefright liblog libutils libbinder libstagefright_foundation \
+        libmedia libmedia_native libgui libcutils libui
 
 LOCAL_LDFLAGS += -L$(LOCAL_PATH)/../libs/ -lpython2.7 
 
@@ -15,7 +18,9 @@ LOCAL_SRC_FILES := \
 	main.c \
 	pybinder.cpp \
     binder_wrap.cpp \
-    pyandroidlog.c
+    pyandroidlog.c \
+    mediaplayer_wrap.cpp \
+    pymediaplayer.c
 
 
 LOCAL_MODULE := libpydroid
