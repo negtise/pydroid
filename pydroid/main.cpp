@@ -1,21 +1,37 @@
 #include <Python.h>
 #include <stdio.h>
 #include <android/log.h>
+#include <binder/ProcessState.h>
 
 //void initandroidembed();
-void initbinder();
+extern "C"
+{
+void initbinder_();
+void initmediaplayer_();
 void initandroidlog();
 void init_io(void);
 //void initmain(void);
 void initserver();
 
+}
+
 void initPyDroid()
 {
 //    initandroidembed();
-    initbinder();    
+    initbinder_();  
+    initmediaplayer_();  
 }
 
-int testmain(int argc,char *argv[])
+extern "C" void pydroid_init()
+{
+    static int bInit=0;
+    if(bInit) return;
+    PyEval_InitThreads();
+	android::ProcessState::self()->startThreadPool();
+    bInit = 1;
+}
+
+extern "C" int pydroid_main(int argc,char *argv[])
 {
     printf("+++++++++++argc %d \n",argc);
 
@@ -25,7 +41,10 @@ int testmain(int argc,char *argv[])
     initPyDroid();
 
     initandroidlog();
-    
+
+	android::ProcessState::self()->startThreadPool();
+
+
 /*
     PyRun_SimpleString(
         "import sys, posix\n" \

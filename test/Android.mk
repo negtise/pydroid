@@ -9,7 +9,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../include/native \
 
 #LOCAL_STATIC_LIBRARIES := pydroid
 
-LOCAL_SHARED_LIBRARIES := libpydroid
+#LOCAL_SHARED_LIBRARIES := pydroid
 
 #LOCAL_LDFLAGS += -ldl -lz
 

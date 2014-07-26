@@ -51,7 +51,7 @@ def listServices():
     Py_DECREF(arr)
     return arr
 
-cdef class Binder:
+cdef class NativeBinder:
     cdef void *ptr
     def __cinit__(self,char *name): #, sp[IBinder] service):
         self.ptr = binder_getbinder(name)
@@ -73,7 +73,7 @@ cdef class Binder:
         binder_transact(self.ptr,code,<void *>dataPtr,<void*>replyPtr,flags)
         return reply
 
-cdef class Parcel:
+cdef class NativeParcel:
     cdef void *ptr
     cdef int nativePtr
     def __cinit__(self,unsigned int nativePtr=0): #, sp[IBinder] service):
@@ -104,7 +104,9 @@ cdef class Parcel:
     def writeString16(self,ustr):
         cdef char16_t *un
         cdef int size
-        if isinstance(ustr,unicode):
+        if not ustr:
+            return parcel_writeString16(<void *>self.ptr,<char16_t*>0,0)
+        elif isinstance(ustr,unicode):
             un = <char16_t*>PyUnicode_AS_UNICODE(ustr)
             size = PyUnicode_GetSize(ustr)
             return parcel_writeString16(<void *>self.ptr,un,size)
@@ -161,13 +163,6 @@ cdef class Parcel:
                 result = creator.createFromParcel(self)
                 arr.append(result)
         return arr
-
-    @classmethod
-    def obtain(cls):
-        return Parcel()
-    @classmethod
-    def recycle(cls):
-        pass
 
 cdef int OnTransact(uint32_t code,const void *data,void *reply,uint32_t flags,void *userData) with gil:
     d = Parcel(<unsigned int>data)

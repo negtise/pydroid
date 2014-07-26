@@ -15,14 +15,15 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_LDFLAGS += -L$(LOCAL_PATH)/../libs/ -lpython2.7 
 
 LOCAL_SRC_FILES := \
-	main.c \
-	pybinder.cpp \
+    pydroid.c \
+	main.cpp \
+	pybinder_.cpp \
     binder_wrap.cpp \
     pyandroidlog.c \
     mediaplayer_wrap.cpp \
-    pymediaplayer.c
+    pymediaplayer_.c
 
 
-LOCAL_MODULE := libpydroid
+LOCAL_MODULE := pydroid
 
 include $(BUILD_SHARED_LIBRARY)
